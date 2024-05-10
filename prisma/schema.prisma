@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                    Int           @id @default(autoincrement())
+  email                 String        @unique
+  name                  String?
+  password              String
+  roleId                Int
+  role                  Role          @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  createdRoles          Role[]        @relation("RoleCreator")
+  updatedRoles          Role[]        @relation("RoleUpdator")
+  createdLogs           SystemLog[]   @relation("LogCreator")
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+}
+
+model Role {
+  id           Int        @id @default(autoincrement())
+  name         String     @unique
+  description  String?
+  permissions  Json[]     @default([])
+  isSuper      Int?       @default(0)
+  accounts     Account[]
+  users        User[]
+  creatorId    Int
+  creator      Account    @relation("RoleCreator", fields: [creatorId], references: [id], onDelete: Restrict)
+  updatorId    Int
+  updator      Account    @relation("RoleUpdator", fields: [updatorId], references: [id], onDelete: Restrict)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model User {
+  id             Int            @id @default(autoincrement())
+  email         String         @unique
+  name          String?
+  avatar        String?
+  password      String?
+  roleId        Int
+  role          Role           @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+
+model SystemLog {
+  id            Int        @id @default(autoincrement())
+  module        String
+  action        String
+  ipAddress     String?
+  opSystem      String?
+  browser       String?
+  status        Int?
+  message       String?
+  creatorId     Int?
+  creator       Account?   @relation("LogCreator", fields: [creatorId], references: [id], onDelete: SetNull)
+  createdAt     DateTime?  @default(now())
+}
