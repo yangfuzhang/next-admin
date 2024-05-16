@@ -28,7 +28,7 @@ export default function Page() {
         />
       </div>
    
-      <Card className={cn("w-[360px] h-[454px] max-w-[100%] flex flex-col items-start justify-center sm:rounded md:rounded-none md:rounded-r overflow-y-scroll")}>
+      <Card className={cn("w-[360px] h-[454px] max-w-[100%] flex flex-col items-start justify-center sm:rounded md:rounded-none md:rounded-r")}>
         <CardHeader>
           <CardTitle>管理员登录</CardTitle>
           <CardDescription>账号密码登录</CardDescription>

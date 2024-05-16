@@ -7,6 +7,8 @@ const AUTH_SUCCESS = 'auth:success'
 
 const ADMIN_THEME_CONFIG = 'admin:theme:config'
 
+const UPLOAD_DIR = 'upload'
+
 
 export {
   API_PREFIX,
@@ -15,4 +17,5 @@ export {
   AUTH_FAILED,
   AUTH_SUCCESS,
   ADMIN_THEME_CONFIG,
+  UPLOAD_DIR,
 }
