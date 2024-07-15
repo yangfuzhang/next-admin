@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import { RolesEnum } from "@/types/enums";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -8,10 +7,10 @@ async function main() {
 
   const user1 = await prisma.user.create({
     data: {
-      email: "2285511816@qq.com",
-      name: "James Yang",
-      password: bcrypt.hashSync("123456", salt),
-      role: RolesEnum.SUPER,
+      email: process.env.SUPER_ADMIN_EMAIL!,
+      name: process.env.SUPER_ADMIN_NAME!,
+      password: bcrypt.hashSync(process.env.SUPER_ADMIN_PASSWORD!, salt),
+      role: "super",
       status: 1,
       isSuper: 1,
     },
