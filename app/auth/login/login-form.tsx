@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/form/password-input";
 import { SvgIcons } from "@/components/icons/svg-icons";
 import { toastError } from "@/lib/toast";
 import { signIn } from "next-auth/react";
@@ -99,8 +100,7 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel>密码</FormLabel>
               <FormControl>
-                <Input
-                  type="password"
+                <PasswordInput
                   placeholder="请输入密码"
                   autoComplete="current-password"
                   {...field}
