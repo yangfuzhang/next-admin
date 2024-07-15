@@ -1,6 +1,6 @@
-import { getItem, setItem, removeItem } from './storage'
-import { AUTH_TOKEN, AUTH_REFRESH, ADMIN_THEME_CONFIG } from './constants'
-import { ThemeConfig } from '@/types';
+import { getItem, setItem, removeItem } from "./storage";
+import { AUTH_TOKEN, AUTH_REFRESH, THEME_CONFIG } from "./constants";
+import { ThemeConfig } from "@/types";
 
 export function getClientAuthToken() {
   return getItem(AUTH_TOKEN);
@@ -26,14 +26,14 @@ export function removeClientRefreshToken() {
   removeItem(AUTH_REFRESH);
 }
 
-export function getAdminThemeConfig() {
-  return getItem(ADMIN_THEME_CONFIG);
+export function getThemeConfig() {
+  return getItem(THEME_CONFIG);
 }
 
-export function setAdminThemeConfig(config: ThemeConfig) {
-  return setItem(ADMIN_THEME_CONFIG, config);
+export function setThemeConfig(config: ThemeConfig) {
+  return setItem(THEME_CONFIG, config);
 }
 
 export function removeAdminThemeConfig() {
-  return removeItem(ADMIN_THEME_CONFIG);
+  return removeItem(THEME_CONFIG);
 }

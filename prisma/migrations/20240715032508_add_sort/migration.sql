@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Bot" ADD COLUMN     "sort" INTEGER DEFAULT 0;

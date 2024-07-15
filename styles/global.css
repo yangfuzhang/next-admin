@@ -70,6 +70,23 @@
   }
 }
 
+/* ---------------- react-table样式覆盖 ---------------- */
+.table-container {
+  border-radius: var(--radius);
+  background-image:
+    linear-gradient(to right, hsl(var(--card)), hsl(var(--card))),
+    linear-gradient(to left, hsl(var(--card)), hsl(var(--card))),
+    linear-gradient(to right, rgba(0,0,0,.1), rgba(255,255,255,0)),
+    linear-gradient(to left, rgba(0,0,0,.1), rgba(255,255,255,0));
+}
+.dark .table-container {
+  background-image:
+    linear-gradient(to right, hsl(var(--card)), hsl(var(--card))),
+    linear-gradient(to left, hsl(var(--card)), hsl(var(--card))),
+    linear-gradient(to right, rgba(0,0,0,.4), rgba(255,255,255,0)),
+    linear-gradient(to left, rgba(0,0,0,.4), rgba(255,255,255,0));
+}
+
 .animate-fade-in {
   animation: fadeIn 0.3s ease-in-out;
 }

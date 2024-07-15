@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import { ReactQueryProvider } from '@/components/react-query-provider';
+import { ReactQueryProvider } from "@/components/react-query-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
-import '@/styles/global.css'
-import '@/styles/theme.css'
+import "@/styles/global.css";
+import "@/styles/theme.css";
 
 const fontInter = Inter({
   subsets: ["latin"],
@@ -32,7 +33,7 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
@@ -40,7 +41,12 @@ export default function RootLayout({
             {children}
             <Toaster duration={3000} />
           </ReactQueryProvider>
-        </ThemeProvider>  
+        </ThemeProvider>
+
+        <Script
+          src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/0.1.0-beta.4/libs/oversea/index.js"
+          strategy="beforeInteractive"
+        />
       </body>
     </html>
   );

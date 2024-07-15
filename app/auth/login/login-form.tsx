@@ -1,9 +1,8 @@
 "use client";
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
 import SliderCaptcha, { ActionType, Status } from "rc-slider-captcha";
 import {
   Form,
@@ -16,11 +15,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SvgIcons } from "@/components/icons/svg-icons";
-import { useApi } from "@/hooks";
-import { setUser } from "@/store/app";
 import { toastError } from "@/lib/toast";
-import { setClientAuthToken, setClientRefreshToken } from "@/lib/client";
-import { setAuthSuccess } from "@/server-actions/auth";
+import { signIn } from "next-auth/react";
 
 const FormSchema = z.object({
   email: z
@@ -36,8 +32,8 @@ const FormSchema = z.object({
 });
 
 export default function LoginForm() {
+  const [loading, setLoading] = useState(false);
   const actionRef = useRef<ActionType>();
-  const { post, useMutation } = useApi();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -46,30 +42,33 @@ export default function LoginForm() {
     },
   });
 
-  const mutation = useMutation({
-    mutationFn: (values: z.infer<typeof FormSchema>) => {
-      return post("/auth/login", values);
-    },
-  });
-
-  const onSubmit = (values: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     if (!(actionRef.current?.status === Status.Success)) {
       toastError("请完成滑块验证");
       return;
     }
-    mutation.mutate(values, {
-      onSuccess: async ({ token, refresh_token, user }: any) => {
-        await setAuthSuccess();
-        setClientAuthToken(token);
-        setClientRefreshToken(refresh_token);
-        setUser(user);
-        window.location.href = "/";
-      },
-      onError: (error) => {
-        console.log(error);
-        toastError(error.message);
-      },
-    });
+
+    try {
+      setLoading(true);
+
+      const { email, password } = values;
+      const res = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (res?.error) {
+        toastError("认证失败");
+        return;
+      }
+
+      window.location.href = "/chat";
+    } catch (err) {
+      toastError("认证失败");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -129,8 +128,8 @@ export default function LoginForm() {
           }}
         />
 
-        <Button type="submit" disabled={mutation.isPending}>
-          {mutation.isPending && (
+        <Button type="submit" disabled={loading}>
+          {loading && (
             <SvgIcons.spinner className="mr-2 w-4 h-4 animate-spin" />
           )}
           登录
