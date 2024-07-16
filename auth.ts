@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import type { Adapter } from "next-auth/adapters";
@@ -61,7 +62,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return false;
       }
 
-      return !!auth?.user;
+      const { pathname } = request.nextUrl;
+
+      if (pathname === "/") {
+        return NextResponse.redirect(new URL("/chat", request.nextUrl));
+      }
+
+      return true;
     },
 
     async session({ session, token }) {
