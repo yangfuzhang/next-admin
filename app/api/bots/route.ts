@@ -1,10 +1,17 @@
 import { NextResponse } from "next/server";
+import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { FormSchema } from "@/app/(admin)/chat/components/form-schema";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const session = await auth();
+
+  if (!session) {
+    return new Response(null, { status: 401 });
+  }
+
   const items = await prisma.bot.findMany({
     orderBy: {
       sort: "asc",
@@ -19,6 +26,12 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const session = await auth();
+
+  if (!session) {
+    return new Response(null, { status: 401 });
+  }
+
   const reqRaw = await request.json();
   const req = FormSchema.safeParse(reqRaw);
 
@@ -54,6 +67,12 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  const session = await auth();
+
+  if (!session) {
+    return new Response(null, { status: 401 });
+  }
+
   const reqRaw = await request.json();
   const { id } = reqRaw;
   const req = FormSchema.safeParse(reqRaw);
@@ -82,6 +101,12 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  const session = await auth();
+
+  if (!session) {
+    return new Response(null, { status: 401 });
+  }
+
   const req = await request.json();
   const { id } = req;
   const bot = await prisma.bot.findUnique({

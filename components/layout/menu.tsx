@@ -4,7 +4,8 @@ import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { MENUS } from "@/lib/menus";
-import { RolesEnum } from "@/types/enums";
+import { toastError } from "@/lib/toast";
+import { AdminRoutesEnum, RolesEnum } from "@/types/enums";
 
 export function Menu() {
   const pathname = usePathname();
@@ -13,6 +14,14 @@ export function Menu() {
   const permittedMenus = MENUS.filter((menu) => {
     return menu.roles.includes(role as RolesEnum);
   });
+
+  if (!session.data) {
+    toastError("登录过期，请重新登录");
+    setTimeout(() => {
+      window.location.href = AdminRoutesEnum.LOGIN;
+    }, 2000);
+    return;
+  }
 
   return (
     <>

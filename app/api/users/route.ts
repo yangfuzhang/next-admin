@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
-import prisma from "@/lib/prisma";
 import { type NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma";
 import { DEFAULT_PAGESIZE } from "@/lib/constants";
 import {
   CreateFormSchema,
@@ -10,6 +11,12 @@ import {
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
+  const session = await auth();
+
+  if (!session) {
+    return new Response(null, { status: 401 });
+  }
+
   const searchParams = request.nextUrl.searchParams;
   const page = searchParams.get("page") ?? 1;
   const pageSize = searchParams.get("pageSize") ?? DEFAULT_PAGESIZE;
@@ -38,6 +45,12 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: Request) {
+  const session = await auth();
+
+  if (!session) {
+    return new Response(null, { status: 401 });
+  }
+
   const reqRaw = await request.json();
   const req = CreateFormSchema.safeParse(reqRaw);
 
@@ -72,6 +85,12 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  const session = await auth();
+
+  if (!session) {
+    return new Response(null, { status: 401 });
+  }
+
   const reqRaw = await request.json();
   const { id } = reqRaw;
   const req = EditFormSchema.safeParse(reqRaw);
@@ -102,6 +121,12 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  const session = await auth();
+
+  if (!session) {
+    return new Response(null, { status: 401 });
+  }
+
   const req = await request.json();
   const { id } = req;
   const user = await prisma.user.findUnique({

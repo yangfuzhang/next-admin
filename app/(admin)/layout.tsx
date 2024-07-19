@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import { SideBar } from "@/components/layout";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import { SideBar } from "@/components/layout";
 
 export default async function AdminLayout({
   children,

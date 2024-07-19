@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_PREFIX } from "@/lib/constants";
+import { toastError } from "./toast";
 import { AdminRoutesEnum } from "@/types/enums";
 
 function request(options: Record<string, any>) {
@@ -44,7 +45,10 @@ function request(options: Record<string, any>) {
         err.response.status === 401 &&
         window.location.pathname !== AdminRoutesEnum.LOGIN
       ) {
-        window.location.href = AdminRoutesEnum.LOGIN;
+        toastError("登录过期，请重新登录");
+        setTimeout(() => {
+          window.location.href = AdminRoutesEnum.LOGIN;
+        }, 2000);
         return;
       }
 

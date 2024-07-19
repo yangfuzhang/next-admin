@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import { Menu } from "./menu";
 import Account from "./account";
 export async function SideBar() {

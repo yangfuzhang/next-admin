@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 
 export async function POST(request: Request) {
+  const session = await auth();
+
+  if (!session) {
+    return new Response(null, { status: 401 });
+  }
+
   const reqRaw = await request.json();
   const { id, password, confirmPassword } = reqRaw;
 
